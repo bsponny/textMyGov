@@ -20,7 +20,22 @@
             <label for="password">Password:</label>
             <input type="password" name="password" required>
         </div>
+        <div>
+            <label for="password_confirmation">Confirm Password:</label>
+            <input type="password" name="password_confirmation" required>
+        </div>
         <button type="submit">Register</button>
     </form>
+
+    @if ($errors->any())
+    <div>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
 </body>
 </html>

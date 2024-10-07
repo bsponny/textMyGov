@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash; // Import Hash facade
 
 class UserController extends Controller
 {
@@ -17,16 +18,16 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed', // Ensure password confirmation
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         // Create user and hash the password
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Hash the password before saving
+            'password' => Hash::make($request->password),
         ]);
         
-        return redirect('/users/create')->with('success', 'User created successfully!');
+        return redirect('/users')->with('success', 'User created successfully!');
     }
 }
