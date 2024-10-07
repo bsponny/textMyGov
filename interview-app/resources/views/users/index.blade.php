@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users List</title>
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
 </head>
 <body>
     <h1>Users List</h1>
     <div>
-        <button>Create New User</button>
+        <a href="{{ url('/users/create') }}">
+            <button>Create New User</button>
+        </a>
     </div>
+
 
     <table border="2">
         <tr>
