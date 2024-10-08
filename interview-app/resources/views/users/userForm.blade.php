@@ -10,6 +10,7 @@
 <body>
     <div class="container">
         <h1>{{ isset($user) ? 'Edit User' : 'Create User' }}</h1>
+        <div id="message" style="display: none;"></div> <!-- Message container -->
         <form id="userForm" action="{{ isset($user) ? route('users.update', $user->id) : route('users.store') }}" method="POST">
             @csrf
             @if(isset($user))
@@ -55,8 +56,9 @@
             $('#userForm').on('submit', function(event) {
                 event.preventDefault(); // Prevent the default form submission
 
-                // Reset any previous error messages
+                // Reset any previous error messages and messages
                 $('.error-message').remove();
+                $('.message').remove();
 
                 let isValid = true;
 
@@ -71,35 +73,37 @@
                     $('#email').after('<span class="error-message">Email is required.</span>');
                 }
 
-                if ($('#password').val() === '' && !$('input[name="_method"]').val()) { // Only require password for new users
-                    isValid = false;
-                    $('#password').after('<span class="error-message">Password is required.</span>');
-                }
-
-                if ($('#password_confirmation').val() !== $('#password').val()) {
-                    isValid = false;
-                    $('#password_confirmation').after('<span class="error-message">Passwords do not match.</span>');
-                }
-
-                // If validation passes, show alert and submit the form using AJAX
-                if (isValid) {
-                    const isEditing = $('input[name="_method"]').val() === 'PUT';
-                    
-                    if (isEditing) {
-                        alert('Updating user...');
-                    } else {
-                        alert('Creating a new user...');
+                // Only validate password fields if it's a new user or password fields are filled during edit
+                if (!$('input[name="_method"]').length || $('#password').val() !== '' || $('#password_confirmation').val() !== '') {
+                    if ($('#password').val() === '') {
+                        isValid = false;
+                        $('#password').after('<span class="error-message">Password is required.</span>');
                     }
+
+                    if ($('#password_confirmation').val() !== $('#password').val()) {
+                        isValid = false;
+                        $('#password_confirmation').after('<span class="error-message">Passwords do not match.</span>');
+                    }
+                }
+
+                // If validation passes, submit the form using AJAX
+                if (isValid) {
+                    let action = $('input[name="_method"]').length ? 'Updating User...' : 'Creating User...';
+                    $('#message').text(action).show(); // Show a message without needing to dismiss it
 
                     $.ajax({
                         url: $(this).attr('action'), // Use the form's action attribute
                         type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
-                            // Handle success
-                            alert(isEditing ? 'User updated successfully!' : 'User created successfully!');
-                            // Optionally, redirect or clear the form
-                            window.location.href = "{{ route('users.index') }}"; // Redirect to users list
+                            // Update the message based on the action
+                            let successMessage = $('input[name="_method"]').length ? 'User updated successfully!' : 'User created successfully!';
+                            $('#message').text(successMessage); // Update the message on the screen
+                            
+                            // Redirect to the index page after a short delay (optional)
+                            setTimeout(function() {
+                                window.location.href = "{{ route('users.index') }}"; // Change to your actual route
+                            }, 2000); // 2000 milliseconds = 2 seconds delay
                         },
                         error: function(xhr) {
                             // Handle validation errors from the server
@@ -109,7 +113,7 @@
                                     $(`#${key}`).after(`<span class="error-message">${value[0]}</span>`);
                                 });
                             } else {
-                                alert('An error occurred. Please try again.');
+                                $('#message').text('An error occurred. Please try again.'); // Show an error message
                             }
                         }
                     });
