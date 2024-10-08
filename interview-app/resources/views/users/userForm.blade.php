@@ -71,7 +71,7 @@
                     $('#email').after('<span class="error-message">Email is required.</span>');
                 }
 
-                if ($('#password').val() === '') {
+                if ($('#password').val() === '' && !$('input[name="_method"]').val()) { // Only require password for new users
                     isValid = false;
                     $('#password').after('<span class="error-message">Password is required.</span>');
                 }
@@ -81,15 +81,23 @@
                     $('#password_confirmation').after('<span class="error-message">Passwords do not match.</span>');
                 }
 
-                // If validation passes, submit the form using AJAX
+                // If validation passes, show alert and submit the form using AJAX
                 if (isValid) {
+                    const isEditing = $('input[name="_method"]').val() === 'PUT';
+                    
+                    if (isEditing) {
+                        alert('Updating user...');
+                    } else {
+                        alert('Creating a new user...');
+                    }
+
                     $.ajax({
                         url: $(this).attr('action'), // Use the form's action attribute
                         type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
                             // Handle success
-                            alert('User created successfully!');
+                            alert(isEditing ? 'User updated successfully!' : 'User created successfully!');
                             // Optionally, redirect or clear the form
                             window.location.href = "{{ route('users.index') }}"; // Redirect to users list
                         },
