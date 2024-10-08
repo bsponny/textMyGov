@@ -13,38 +13,59 @@ To set up and run this project, you need the following installed on your machine
 
 ## Setting Up the Project
 
-1. **Clone the Repository**:
+* **Clone the Repository**:
    Clone the `textMyGov` repository to your local machine:
    ```bash
    git clone https://github.com/bsponny/textMyGov.git
    cd textMyGov
    ```
 
-2. **Install PHP Dependencies**:
+* **Install PHP Dependencies**:
    Run the following command to install all PHP dependencies via Composer:
    ```bash
    composer install
    ```
 
-3. **Install Node Dependencies**:
+* **Install Node Dependencies**:
    To install dependencies for Laravel Mix (CSS and JS compilation), run:
    ```bash
    npm install
    ```
 
-4. **Create Environment Configuration**:
+* **Create Environment Configuration**:
    Copy the `.env.example` file to create your environment configuration:
    ```bash
    cp .env.example .env
    ```
 
-5. **Generate Application Key**:
+* **Install mysql**:
+	```bash
+	sudo apt-get install mysql-server
+	```
+
+* **Start mysql**:
+	```bash
+	sudo service mysql start
+	sudo mysql
+	```
+	```sql
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_new_password';
+	FLUSH PRIVILEGES;
+	EXIT;
+	```
+
+* **Test the connection by running this command and entering that new password**
+	```bash
+	mysql -u root -p
+	```
+
+* **Generate Application Key**:
    Laravel requires an app key for security purposes. Run the following to generate one:
    ```bash
    php artisan key:generate
    ```
 
-6. **Set Up MySQL Database**:
+* **Set Up MySQL Database**:
    In your `.env` file, configure your MySQL database details:
    ```env
    DB_CONNECTION=mysql
@@ -55,13 +76,13 @@ To set up and run this project, you need the following installed on your machine
    DB_PASSWORD=yourpassword
    ```
 
-7. **Run Migrations**:
+* **Run Migrations**:
    Run the migrations to create the necessary tables:
    ```bash
    php artisan migrate
    ```
 
-8. **Serve the Application**:
+* **Serve the Application**:
    You can serve the Laravel app locally by running:
    ```bash
    php artisan serve
