@@ -34,7 +34,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
         
-        return redirect('/users')->with('success', 'User created successfully!');
+        return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
 
     public function destroy($id)
@@ -42,7 +42,7 @@ class UserController extends Controller
         $user = User::findOrFail($id); // Find the user by id
         $user->delete(); // Delete the user
 
-        return redirect('/users')->with('success', 'User deleted successfully!');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully!');
     }
 
     public function edit($id){
@@ -66,6 +66,6 @@ class UserController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
-        return redirect('/users')->with('success', 'User updated successfully!');
+        return redirect()->route('users.index')->with('success', 'User updated successfully!');
     }
 }

@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ isset($user) ? 'Edit User' : 'Create User' }}</title>
     <link rel="stylesheet" href="{{ asset('styles.css') }}"> <!-- Link to the CSS file -->
-    
 </head>
 <body>
     <div class="container">
         <h1>{{ isset($user) ? 'Edit User' : 'Create User' }}</h1>
         <form action="{{ isset($user) ? route('users.update', $user->id) : route('users.store') }}" method="POST">
-        @csrf
-        @if(isset($user))
-            @method('PUT') <!-- This is for the update method -->
-        @endif
+            @csrf
+            @if(isset($user))
+                @method('PUT') <!-- This is for the update method -->
+            @endif
 
             <div class="form-group">
                 <label for="name">Name:</label>
@@ -34,13 +33,10 @@
             </div>
             <button type="submit">{{ isset($user) ? 'Save User' : 'Create User' }}</button>
         </form>
-    </div>
-    <div>
-        <a href="{{ url('/users/') }}">
+        <a href="{{ route('users.index') }}">
             <button>Back to Users Table</button>
         </a>
     </div>
-
     <div class="errors">
         @if ($errors->any())
             <div>
